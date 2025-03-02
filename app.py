@@ -19,7 +19,13 @@ from flask_caching import Cache
 
 warnings.filterwarnings('ignore')
 
-# Configuration du cache
+# Initialize app first (required for cache)
+app = dash.Dash(__name__, suppress_callback_exceptions=True,
+               meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1.0"}],
+               assets_folder='assets')
+server = app.server
+
+# Initialize cache before any @cache.memoize decorators
 cache = Cache(app.server, config={
     'CACHE_TYPE': 'filesystem',
     'CACHE_DIR': 'cache-directory',
@@ -177,17 +183,6 @@ predictions_df, population_data = predict_population(population_data)
 # Sélection de pays représentatifs pour les graphiques
 major_countries = ["USA", "CHN", "IND", "BRA", "RUS", "DEU", "GBR", "FRA", "JPN", "NGA"]
 regions = ["WLD", "EAS", "ECS", "LCN", "MEA", "NAC", "SAS", "SSF"]  # Régions du monde
-
-# Création du dashboard Dash avec un thème bleu
-app = dash.Dash(
-    __name__, 
-    suppress_callback_exceptions=True,
-    meta_tags=[
-        {"name": "viewport", "content": "width=device-width, initial-scale=1.0"}
-    ],
-    assets_folder='assets'  # Dossier pour les fichiers CSS et autres assets
-)
-server = app.server
 
 # Définition de la mise en page de l'application
 app.layout = html.Div([
@@ -1055,7 +1050,6 @@ def open_browser():
         webbrowser.open_new("http://127.0.0.1:8050/")
         
         
-server = app.server
 # Lancer l'application
 if __name__ == '__main__':
     try:
