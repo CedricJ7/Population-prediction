@@ -17,13 +17,13 @@ import warnings
 import os
 from flask_caching import Cache
 import gunicorn
+from flask import Flask
 
 warnings.filterwarnings('ignore')
 
 # Initialize app first (required for cache)
-app = dash.Dash(__name__, suppress_callback_exceptions=True,
-               meta_tags=[{"name": "viewport", "content": "width=device-width, initial-scale=1.0"}],
-               assets_folder='assets')
+app = Flask(__name__)
+
 server = app.server
 
 # Initialize cache before any @cache.memoize decorators
