@@ -1052,13 +1052,17 @@ def open_browser():
         
 # Lancer l'application
 if __name__ == '__main__':
-    # Pour le développement local
+    # Récupérer le port depuis l'environnement (pour Render) ou utiliser 8050 par défaut
+    port = int(os.environ.get('PORT', 8050))
+    
+    # Démarrer le thread du navigateur seulement en local
     if os.environ.get('RENDER') != 'true':
-        # Démarrer un thread qui ouvrira le navigateur (seulement en local)
         threading.Thread(target=open_browser).start()
-        # Utiliser 127.0.0.1 au lieu de 0.0.0.0 pour éviter les problèmes de permissions en local
-        app.run_server(debug=False, host='127.0.0.1', port=int(os.environ.get('PORT', 8050)))
-    else:
-        # Pour Render.com
-        # Ne pas utiliser host ou port ici, gunicorn s'en charge
-        app.run_server(debug=False)
+    
+    # Toujours écouter sur 0.0.0.0 (toutes les interfaces) pour que Render puisse détecter le port
+    print(f"Démarrage de l'application sur le port {port}")
+    app.run_server(
+        host='0.0.0.0',  # Nécessaire pour Render
+        port=port,
+        debug=False
+    )
