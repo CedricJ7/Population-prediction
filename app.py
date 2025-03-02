@@ -1053,7 +1053,9 @@ def open_browser():
         _browser_opened = True
         time.sleep(1)
         webbrowser.open_new("http://127.0.0.1:8050/")
-
+        
+        
+server = app.server
 # Lancer l'application
 if __name__ == '__main__':
     try:
