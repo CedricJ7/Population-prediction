@@ -24,14 +24,14 @@ warnings.filterwarnings('ignore')
 # Initialize app first (required for cache)
 app = Flask(__name__)
 
-server = app.server
+# server = app.server
 
 # Initialize cache before any @cache.memoize decorators
-cache = Cache(app.server, config={
-    'CACHE_TYPE': 'filesystem',
-    'CACHE_DIR': 'cache-directory',
-    'CACHE_DEFAULT_TIMEOUT': 300
-})
+# cache = Cache(app.server, config={
+#     'CACHE_TYPE': 'filesystem',
+#     'CACHE_DIR': 'cache-directory',
+#     'CACHE_DEFAULT_TIMEOUT': 300
+# })
 
 # Définir le thème bleu pour tout le dashboard
 blue_theme = {
