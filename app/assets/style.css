@@ -1,0 +1,155 @@
+/* Main dashboard styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #0a0e2a;
+    color: white;
+}
+
+/* Custom dark blue theme for the dashboard */
+._dash-loading {
+    background-color: #0a0e2a;
+    color: #00a8ff;
+}
+
+/* Container styling */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Dashboard card styling */
+.dashboard-card {
+    background-color: #121638;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Header styling */
+h1, h2, h3 {
+    color: white;
+    font-weight: 500;
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #00a8ff;
+}
+
+/* Paragraph styling */
+p {
+    line-height: 1.6;
+}
+
+/* Graph styling tweaks */
+.js-plotly-plot .plotly .main-svg {
+    background-color: transparent !important;
+}
+
+.js-plotly-plot .plotly .modebar {
+    background-color: rgba(18, 22, 56, 0.7) !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn path {
+    fill: #00a8ff !important;
+}
+
+/* Custom styling for indicators */
+.indicator-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.indicator-title {
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+/* Custom scroll bar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0e2a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00a8ff;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0088ff;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 1200px) {
+    .dashboard-row {
+        flex-direction: column;
+    }
+    
+    .dashboard-card-half {
+        width: 100% !important;
+        margin-right: 0 !important;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    .dashboard-card {
+        padding: 15px;
+    }
+}
+
+/* Animation effects */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.dashboard-card {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Custom color classes */
+.text-blue {
+    color: #00a8ff;
+}
+
+.text-green {
+    color: #26e282;
+}
+
+/* Footer styling */
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    color: #8a8d98;
+    font-size: 0.9rem;
+} 
