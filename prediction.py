@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
 # Pour ARIMAX (ARIMA avec variables exogènes)
 from statsmodels.tsa.arima.model import ARIMA
@@ -37,7 +37,7 @@ def compare_models_and_plot():
     train_data = data[data["Year"] < 2016].copy()
     test_data = data[(data["Year"] >= 2016) & (data["Year"] <= 2023)].copy()
     full_data = data[data["Year"] <= 2023].copy()  # pour la prévision
-    forecast_years = np.arange(2016, 2051)
+    forecast_years = np.arange(2023, 2051)
     
     # --- Préparation des données panel (pour RF, XGBoost, Ridge, LSTM) ---
     X_train = pd.get_dummies(train_data[predictive_cols], drop_first=True)
@@ -50,7 +50,7 @@ def compare_models_and_plot():
     X_train_scaled = scaler_panel.fit_transform(X_train)
     X_test_scaled = scaler_panel.transform(X_test)
     
-    results = {}  # Pour stocker uniquement le MSE sur test
+    results = {}  # Pour stocker le MSE et le R2 sur test
 
     # --- Modèle 1 : ARIMAX (modélisation par pays) ---
     arimax_test_preds = []
@@ -105,7 +105,8 @@ def compare_models_and_plot():
             print(f"ARIMAX échoue pour {country}: {e}")
     
     mse_arimax_test = mean_squared_error(arimax_true_test, arimax_test_preds)
-    results["ARIMAX"] = {"mse_test": mse_arimax_test}
+    r2_arimax_test = r2_score(arimax_true_test, arimax_test_preds)
+    results["ARIMAX"] = {"mse_test": mse_arimax_test, "r2_test": r2_arimax_test}
     arimax_forecast_df = pd.DataFrame(arimax_forecast_dict)
     arimax_forecast_agg = arimax_forecast_df.sum(axis=1).values
 
@@ -114,7 +115,8 @@ def compare_models_and_plot():
     rf.fit(X_train_scaled, y_train)
     rf_test_pred = rf.predict(X_test_scaled)
     mse_rf_test = mean_squared_error(y_test, rf_test_pred)
-    results["RandomForest"] = {"mse_test": mse_rf_test}
+    r2_rf_test = r2_score(y_test, rf_test_pred)
+    results["RandomForest"] = {"mse_test": mse_rf_test, "r2_test": r2_rf_test}
     
     forecast_panel_list = []
     for country in full_data["Country Name"].unique():
@@ -139,7 +141,8 @@ def compare_models_and_plot():
     xgb.fit(X_train_scaled, y_train)
     xgb_test_pred = xgb.predict(X_test_scaled)
     mse_xgb_test = mean_squared_error(y_test, xgb_test_pred)
-    results["XGBoost"] = {"mse_test": mse_xgb_test}
+    r2_xgb_test = r2_score(y_test, xgb_test_pred)
+    results["XGBoost"] = {"mse_test": mse_xgb_test, "r2_test": r2_xgb_test}
     xgb_forecast_pred = xgb.predict(X_forecast_scaled)
     forecast_panel_df["XGB_Pred"] = xgb_forecast_pred
     xgb_forecast_agg = forecast_panel_df.groupby("Year")["XGB_Pred"].sum().values
@@ -149,7 +152,8 @@ def compare_models_and_plot():
     ridge.fit(X_train_scaled, y_train)
     ridge_test_pred = ridge.predict(X_test_scaled)
     mse_ridge_test = mean_squared_error(y_test, ridge_test_pred)
-    results["Ridge"] = {"mse_test": mse_ridge_test}
+    r2_ridge_test = r2_score(y_test, ridge_test_pred)
+    results["Ridge"] = {"mse_test": mse_ridge_test, "r2_test": r2_ridge_test}
     ridge_forecast_pred = ridge.predict(X_forecast_scaled)
     forecast_panel_df["Ridge_Pred"] = ridge_forecast_pred
     ridge_forecast_agg = forecast_panel_df.groupby("Year")["Ridge_Pred"].sum().values
@@ -201,7 +205,8 @@ def compare_models_and_plot():
     lstm_test_pred = scaler_y.inverse_transform(lstm_test_pred_scaled)
     true_y_test = scaler_y.inverse_transform(lstm_y_seq_test)
     mse_lstm_test = mean_squared_error(true_y_test, lstm_test_pred)
-    results["LSTM"] = {"mse_test": mse_lstm_test}
+    r2_lstm_test = r2_score(true_y_test, lstm_test_pred)
+    results["LSTM"] = {"mse_test": mse_lstm_test, "r2_test": r2_lstm_test}
     
     # Prévision LSTM itérative par pays
     lstm_forecast_dict = {}
@@ -223,10 +228,10 @@ def compare_models_and_plot():
     lstm_forecast_df = pd.DataFrame(lstm_forecast_dict, index=forecast_years)
     lstm_forecast_agg = lstm_forecast_df.sum(axis=1).values
 
-    # --- Affichage du MSE sur test ---
-    print("MSE sur test :")
+    # --- Affichage des métriques sur test ---
+    print("Performance sur le jeu de test :")
     for model_name, metrics in results.items():
-        print(f"{model_name}: MSE Test = {metrics['mse_test']:.2f}")
+        print(f"{model_name}: MSE Test = {metrics['mse_test']:.2f}, R2 Test = {metrics['r2_test']:.2f}")
     
     # --- Graphique de la population mondiale (1960 à 2050) ---
     global_actual = data.groupby("Year")[target].sum().reset_index()
@@ -260,6 +265,19 @@ def compare_models_and_plot():
     plt.legend()
     plt.grid(True)
     plt.savefig("mse_comparison.png")
+    plt.close()
+    
+    # --- Graphique comparatif des R2 sur test ---
+    r2_test_values = [results[m]["r2_test"] for m in model_names]
+    plt.figure(figsize=(10,6))
+    plt.bar(x_axis, r2_test_values, width, label="R2 Test")
+    plt.xticks(x_axis, model_names)
+    plt.xlabel("Modèles")
+    plt.ylabel("R2")
+    plt.title("Comparaison des R2 sur test")
+    plt.legend()
+    plt.grid(True)
+    plt.savefig("r2_comparison.png")
     plt.close()
 
 if __name__ == "__main__":

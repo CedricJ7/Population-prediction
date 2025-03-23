@@ -1,155 +1,700 @@
-/* Main dashboard styles */
-body {
+/* Importation des polices */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+/* Style général */
+* {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #0a0e2a;
-    color: white;
+    box-sizing: border-box;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
 }
 
-/* Custom dark blue theme for the dashboard */
-._dash-loading {
-    background-color: #0a0e2a;
-    color: #00a8ff;
+body {
+    background-color: #0c1445; /* Bleu foncé profond */
+    color: #e9ecef;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Container styling */
-.container {
-    width: 100%;
-    max-width: 1200px;
+/* Container global pour limiter à 1920px */
+.app-container {
+    max-width: 1920px;
     margin: 0 auto;
-    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-/* Dashboard card styling */
-.dashboard-card {
-    background-color: #121638;
+/* En-tête de l'application - version compacte */
+.compact-header {
+    background: linear-gradient(135deg, #0f1a4d 0%, #1e3a8a 100%);
+    padding: 8px 0;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 10;
+    height: 50px;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1800px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(45deg, #00c6ff, #0072ff);
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+}
+
+.logo-icon::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 464c-114.7 0-208-93.31-208-208S141.3 48 256 48s208 93.31 208 208S370.7 464 256 464zM256 336c35.35 0 64-28.65 64-64c0-35.35-28.65-64-64-64s-64 28.65-64 64C192 307.3 220.7 336 256 336zM368 96c0-17.67-14.33-32-32-32c-17.67 0-32 14.33-32 32c0 17.67 14.33 32 32 32C353.7 128 368 113.7 368 96zM96 240c17.67 0 32-14.33 32-32c0-17.67-14.33-32-32-32c-17.67 0-32 14.33-32 32C64 225.7 78.33 240 96 240zM256 80c0-17.67-14.33-32-32-32c-17.67 0-32 14.33-32 32c0 17.67 14.33 32 32 32C241.7 112 256 97.67 256 80z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.header-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(90deg, #00c6ff, #0072ff, #00c6ff);
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 5s ease infinite;
+    text-shadow: 0 0 30px rgba(0, 198, 255, 0.3);
+}
+
+/* Animation de gradient */
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Conteneur principal - optimisé pour 1920x1080 */
+.main-container {
+    display: flex;
+    flex: 1;
+    padding: 8px;
+    gap: 8px;
+    height: calc(100vh - 70px); /* 50px header + 20px footer */
+    overflow: hidden;
+}
+
+/* Sidebar (panneau latéral) - plus compact */
+.sidebar {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Zone de contenu */
+.content-area {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Contenus primaires */
+.primary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    height: 100%;
+    width: 100%;
+}
+
+/* Panneaux (filtre) */
+.filter-panel {
+    background: linear-gradient(135deg, #132158 0%, #0c1445 100%);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-/* Header styling */
-h1, h2, h3 {
+.panel-title {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+/* Sections de filtres */
+.filter-section {
+    margin-bottom: 12px;
+}
+
+.filter-section:last-of-type {
+    margin-bottom: 8px;
+}
+
+.filter-section-last {
+    margin-bottom: 12px;
+}
+
+.filter-label {
+    font-size: 0.8rem;
+    color: #b6ccf0;
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+.filter-icon {
+    margin-right: 0.5rem;
+    color: #0072ff;
+}
+
+/* Année Slider */
+.year-filter {
+    margin-bottom: 16px;
+}
+
+.year-range-container {
+    padding: 0.2rem 0;
+}
+
+.year-range-display {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+.year-slider {
+    margin: 8px 0 4px;
+}
+
+/* Style des sliders */
+.rc-slider-rail {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.rc-slider-track {
+    height: 4px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+}
+
+.rc-slider-handle {
+    width: 12px;
+    height: 12px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 114, 255, 0.5);
+    margin-top: -4px;
+}
+
+.rc-slider-handle:hover {
+    box-shadow: 0 0 0 5px rgba(0, 198, 255, 0.2);
+}
+
+.rc-slider-handle:active {
+    box-shadow: 0 0 0 5px rgba(0, 198, 255, 0.3);
+}
+
+.rc-slider-mark {
+    top: 15px;
+}
+
+.rc-slider-mark-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.65rem;
+}
+
+.rc-slider-dot {
+    display: none;
+}
+
+/* Style des dropdowns */
+.dropdown {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.Select-control {
+    background-color: #132158 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    height: 32px !important;
+    color: white !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.Select-placeholder, .Select--single > .Select-control .Select-value {
+    line-height: 32px !important;
+    padding-left: 10px !important;
+}
+
+.Select-menu-outer {
+    background-color: #132158 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 0 8px 8px !important;
+    margin-top: -2px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.Select-option {
+    background-color: #132158 !important;
+    color: white !important;
+    padding: 8px 10px !important;
+}
+
+.Select-option:hover, .Select-option.is-focused {
+    background-color: rgba(0, 114, 255, 0.2) !important;
+}
+
+.Select-option.is-selected {
+    background-color: rgba(0, 114, 255, 0.3) !important;
+}
+
+.Select-value-label {
+    color: white !important;
+}
+
+/* Chiffres clés */
+.key-figure-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+    overflow-y: auto;
+    max-height: 50%;
+}
+
+.key-figure {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.key-figure:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.key-figure-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.life-expectancy-icon {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+}
+
+.population-icon {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.3);
+}
+
+.growth-rate-icon {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    box-shadow: 0 0 10px rgba(67, 233, 123, 0.3);
+}
+
+.gdp-icon {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.fertility-icon {
+    background: linear-gradient(135deg, #EE82EE 0%, #DA70D6 100%);
+    box-shadow: 0 0 10px rgba(238, 130, 238, 0.3);
+}
+
+.key-figure-content {
+    flex: 1;
+}
+
+.key-figure-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0;
+}
+
+.key-figure-label {
+    font-size: 0.7rem;
+    color: #b6ccf0;
+}
+
+/* Lien vers les sources */
+.source-link-container {
+    margin-top: 5px;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 6px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.source-link {
+    color: #4facfe;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.source-link:hover {
+    color: #00f2fe;
+    text-decoration: underline;
+}
+
+.source-icon {
+    margin-right: 5px;
+    font-size: 0.8rem;
+}
+
+/* Rangées et cartes */
+.row {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.first-row, .second-row {
+    height: calc(50% - 4px);
+    min-height: 0;
+}
+
+.card {
+    background: linear-gradient(135deg, #132158 0%, #0c1445 100%);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cartes équilibrées pour la rangée du haut */
+.balanced-card {
+    flex: 1;
+}
+
+/* Effet de survol sur les cartes */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #00c6ff, #0072ff, #00c6ff);
+    background-size: 200% auto;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.card:hover::before {
+    opacity: 1;
+    animation: gradient 5s ease infinite;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-icon {
+    margin-right: 6px;
+    font-size: 0.9rem;
+    color: #0072ff;
+}
+
+.card-title {
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Graphiques */
+.graph {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+}
+
+.compact-graph {
+    height: 100%;
+}
+
+/* Statistiques de corrélation */
+.correlation-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 6px;
+    padding: 4px 6px;
+    background-color: rgba(0, 114, 255, 0.1);
+    border-radius: 6px;
+    border-left: 3px solid #0072ff;
+}
+
+.stat-item {
+    font-size: 0.8rem;
     color: white;
     font-weight: 500;
+    display: flex;
+    align-items: center;
 }
 
-h1 {
-    font-size: 2.2rem;
-    margin-bottom: 0.5rem;
+.correlation-icon, .slope-icon {
+    margin-right: 4px;
+    font-size: 0.75rem;
 }
 
-h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: #00a8ff;
+.correlation.positive {
+    color: #26e282;
 }
 
-/* Paragraph styling */
-p {
-    line-height: 1.6;
+.correlation.negative {
+    color: #ff5555;
 }
 
-/* Graph styling tweaks */
+.stat-label {
+    margin-right: 4px;
+}
+
+/* Styles Plotly */
 .js-plotly-plot .plotly .main-svg {
     background-color: transparent !important;
 }
 
 .js-plotly-plot .plotly .modebar {
-    background-color: rgba(18, 22, 56, 0.7) !important;
+    background-color: rgba(19, 33, 88, 0.7) !important;
+    opacity: 0.7;
 }
 
 .js-plotly-plot .plotly .modebar-btn path {
-    fill: #00a8ff !important;
+    fill: #0072ff !important;
 }
 
-/* Custom styling for indicators */
-.indicator-container {
+/* Style spécifique pour éviter le chevauchement des étiquettes */
+.js-plotly-plot .svg-container {
+    margin-top: -10px;
+}
+
+/* Pied de page compact */
+.compact-footer {
+    background: linear-gradient(135deg, #0f1a4d 0%, #1e3a8a 100%);
+    padding: 0;
+    text-align: center;
+    height: 20px;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.footer-content {
+    height: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
 }
 
-.indicator-title {
-    color: white;
-    font-size: 1rem;
-    margin-bottom: 5px;
-    text-align: center;
+.footer-text {
+    margin: 0;
+    color: #b6ccf0;
+    font-size: 0.7rem;
 }
 
-/* Custom scroll bar */
+/* Scrollbar personnalisée */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #0a0e2a;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #00a8ff;
-    border-radius: 4px;
+    background: rgba(0, 114, 255, 0.5);
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #0088ff;
+    background: rgba(0, 114, 255, 0.7);
 }
 
-/* Media queries for responsive design */
-@media (max-width: 1200px) {
-    .dashboard-row {
-        flex-direction: column;
-    }
-    
-    .dashboard-card-half {
-        width: 100% !important;
-        margin-right: 0 !important;
-        margin-bottom: 20px;
-    }
+/* Styles pour les onglets */
+.custom-tabs {
+    background-color: #132158 !important;  /* Fond plus foncé pour les tabs */
+    padding: 5px 5px 0 5px;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-@media (max-width: 768px) {
-    h1 {
-        font-size: 1.8rem;
-    }
-    
-    h3 {
-        font-size: 1.1rem;
-    }
-    
-    .dashboard-card {
-        padding: 15px;
-    }
-}
-
-/* Animation effects */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.dashboard-card {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-/* Custom color classes */
-.text-blue {
-    color: #00a8ff;
-}
-
-.text-green {
-    color: #26e282;
-}
-
-/* Footer styling */
-.footer {
-    margin-top: 40px;
-    text-align: center;
-    color: #8a8d98;
+.custom-tab {
+    color: white;
+    background-color: #0c1445 !important;  /* Fond bleu foncé comme le thème */
+    border-radius: 5px 5px 0 0 !important;
+    border: none !important;
+    padding: 10px 15px;
+    font-weight: 600;
     font-size: 0.9rem;
+    margin-right: 3px;
+    transition: all 0.3s ease;
+}
+
+.custom-tab--selected {
+    background-color: #132158 !important;  /* Fond bleu un peu plus clair pour l'onglet sélectionné */
+    color: white !important;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.2);
+    border-bottom: 3px solid #0072ff !important;
+}
+
+/* Styles pour la page de prédictions */
+.predictions-content {
+    padding: 15px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.prediction-title {
+    color: white;
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.prediction-icon {
+    margin-right: 10px;
+    color: #0072ff;
+}
+
+.prediction-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 5px;
+    margin: 5px 0;
+    background: #0c1445;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.prediction-description {
+    font-size: 0.85rem;
+    color: #b6ccf0;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: rgba(0, 114, 255, 0.1);
+    margin-top: 5px;
+    border-left: 3px solid #0072ff;
+}
+
+.third-row {
+    height: auto;
+}
+
+/* Animation gradient */
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Ajout style pour le titre de la choroplèthe */
+.choropleth-variable {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: 12px;
+    font-weight: normal;
+    font-style: italic;
+}
+
+/* Amélioration de l'apparence de la carte choroplèthe */
+.js-plotly-plot .plotly .geo .bg {
+    fill: rgba(0,0,0,0) !important;
+}
+
+.js-plotly-plot .plotly .geo .choroplethlayer path {
+    stroke-opacity: 0.3 !important;
+    stroke-width: 0.5px !important;
+}
+
+/* Style pour un meilleur affichage de la carte sans colorbar */
+.js-plotly-plot .plotly .geo {
+    opacity: 0.9 !important;
+}
+
+/* Ajustement de la hauteur de la carte pour un meilleur affichage */
+#choropleth-map {
+    height: 100% !important;
 } 
