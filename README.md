@@ -1,6 +1,6 @@
 # Prédiction de la Population Mondiale jusqu'en 2100
 
-Ce projet implémente différents modèles de prédiction pour estimer l'évolution de la population mondiale jusqu'en 2100 en utilisant des données historiques de 1960 à 2023 provenant de la Banque Mondiale.
+Ce projet implémente différents modèles de prédiction pour estimer l'évolution de la population mondiale jusqu'en 2100 en utilisant des données historiques de 1960 à 2023 provenant de la Banque Mondiale, ainsi que des analyses descriptives.
 
 ## Modèles implémentés
 
@@ -44,12 +44,6 @@ Les résultats de l'analyse suggèrent que :
 - La baisse des taux de natalité et l'augmentation de l'espérance de vie sont des facteurs clés dans ces prévisions
 - Les prévisions après 2050 présentent une incertitude croissante
 
-## Fonctionnalités spéciales
-
-- **Intervalles de confiance adaptatifs** : L'incertitude augmente avec l'horizon de prédiction
-- **Points de repère** : Visualisation facilitée avec des marqueurs pour 2050 et 2100
-- **Analyse comparative** : Projection des valeurs à court, moyen et long terme (2025, 2050, 2075, 2100)
-
 ## Limitations
 
 Les prédictions sont sujettes à des incertitudes croissantes, particulièrement après 2050, liées à :
@@ -66,4 +60,4 @@ https://databank.worldbank.org/source/world-development-indicators
 
 ## Licence
 
-[Spécifiez la licence ici]
+Open source
